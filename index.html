@@ -2,71 +2,266 @@
 // request-allocation.php
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths boxsizing">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request Allocation - Research Computing Data Core</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Request Allocation</title>
+    <link rel="canonical" href="/research/rcdc/getting-started/request-allocation.php">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap and Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- jQuery and Modernizr -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    
+    <!-- Bootstrap Bundle -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Tiny Slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
+    
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    
+    <!-- UH Global Styles -->
     <style>
-        /* Maintain UH theme colors and styles */
+        /* Global styles from UH website */
         body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
         }
         
-        /* Header styles */
-        .uh-header {
+        /* Skip to content */
+        .skipToContent {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        
+        .skipToContent:focus {
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: auto;
+            height: auto;
+            overflow: auto;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #000;
+            z-index: 999999;
+        }
+        
+        /* Main navigation */
+        .nav-main {
             background-color: #C8102E;
-            color: white;
-            padding: 20px 0;
+            min-height: 64px;
         }
         
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .nav-main .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 15px;
         }
         
-        .uh-logo {
+        .main-logo {
+            height: 28px;
+            margin: 18px 0;
+        }
+        
+        .nav-main-list-items {
             display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
             align-items: center;
-            text-decoration: none;
-            color: white;
         }
         
-        .uh-logo img {
-            height: 40px;
-            margin-right: 10px;
+        .nav-main-item {
+            margin-left: 30px;
         }
         
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
+        .nav-main-item .nav-link {
             color: white;
             text-decoration: none;
             font-weight: 500;
+            font-size: 14px;
+            padding: 8px 0;
         }
         
-        /* Main content area */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .nav-main-item .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Search bar */
+        .search-bar {
+            margin-left: 30px;
+        }
+        
+        .container-search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-field {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 6px 35px 6px 12px;
+            width: 200px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .search-field::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-field:focus {
+            background: rgba(255,255,255,0.3);
+            outline: none;
+        }
+        
+        .magnifying-glass {
+            position: absolute;
+            right: 10px;
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+        
+        .search-submit {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* UH Header Secondary */
+        .uh-header-secondary {
+            background-color: #8B1538;
+            color: white;
+        }
+        
+        .site-name {
+            padding: 40px 0;
+        }
+        
+        .site-name h1 {
+            margin: 0;
+            font-size: 48px;
+            font-weight: 300;
+        }
+        
+        .site-name h1 a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Site navigation */
+        .site-nav {
+            background-color: #6d1229;
+            padding: 15px 0;
+        }
+        
+        .nav-primary {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        .nav-primary > li {
+            position: relative;
+            margin-right: 30px;
+        }
+        
+        .nav-primary > li > a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-primary > li > a:hover {
+            text-decoration: underline;
+        }
+        
+        .caret {
+            margin-left: 5px;
+        }
+        
+        .caret svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        
+        /* Dropdown menu */
+        .children {
+            position: absolute;
+            top: 100%;
+            left: 0;
             background: white;
-            min-height: 600px;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: none;
+            z-index: 1000;
         }
         
+        .nav-primary > li:hover .children {
+            display: block;
+        }
+        
+        .children li {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .children li:last-child {
+            border-bottom: none;
+        }
+        
+        .children a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .children a:hover {
+            background: #f5f5f5;
+        }
+        
+        /* Breadcrumb */
         .breadcrumb {
-            color: #666;
-            margin-bottom: 30px;
+            background: transparent;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
         
         .breadcrumb a {
@@ -74,17 +269,207 @@
             text-decoration: none;
         }
         
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
+        .breadcrumb a:hover {
+            text-decoration: underline;
         }
         
-        /* Form selection styles */
+        .breadcrumb li::after {
+            content: " > ";
+            margin: 0 5px;
+        }
+        
+        .breadcrumb li:last-child::after {
+            content: "";
+        }
+        
+        /* Main content layout */
+        #wrap {
+            min-height: 500px;
+        }
+        
+        .nav-secondary {
+            padding-right: 30px;
+        }
+        
+        .nav-secondary h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-secondary h2 a {
+            color: #C8102E;
+            text-decoration: none;
+        }
+        
+        .nav-secondary nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-secondary nav ul li {
+            margin-bottom: 10px;
+            padding-left: 0;
+        }
+        
+        .nav-secondary nav ul ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .nav-secondary nav ul li a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+        }
+        
+        .nav-secondary nav ul li a:hover,
+        .nav-secondary nav ul li.selected > a {
+            color: #C8102E;
+            text-decoration: underline;
+        }
+        
+        .nav-secondary h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            color: #C8102E;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        /* Content well */
+        #content-well {
+            padding: 0 0 40px 0;
+        }
+        
+        .alert-secondary {
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Footer */
+        .uh-footer-main {
+            background: #333;
+            color: white;
+            margin-top: 50px;
+        }
+        
+        .site-footer {
+            padding: 40px 0;
+        }
+        
+        .contact-block {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            margin-right: 30px;
+        }
+        
+        .footer-logo img {
+            height: 53px;
+        }
+        
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-links {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+        }
+        
+        .footer-links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px 30px;
+        }
+        
+        .footer-links-list a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-links-list a:hover {
+            text-decoration: underline;
+        }
+        
+        .social-media-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-media-list svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .social-media-list a:hover svg {
+            opacity: 1;
+        }
+        
+        .global-footer {
+            background: #222;
+            padding: 20px 0;
+        }
+        
+        .copyright {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+        }
+        
+        .nav-required {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 12px;
+        }
+        
+        .nav-required a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        
+        .nav-required a:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        
+        .nav-item-highlighted a {
+            color: white !important;
+        }
+        
+        /* Custom styles for form selection */
         .form-selector {
             background: #f9f9f9;
             padding: 30px;
             border-radius: 8px;
-            margin-bottom: 30px;
+            margin: 30px 0;
         }
         
         .form-selector h2 {
@@ -96,7 +481,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            max-width: 800px;
+            margin-bottom: 20px;
         }
         
         .form-option {
@@ -106,7 +491,6 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
         }
         
         .form-option:hover {
@@ -119,14 +503,17 @@
             background-color: #fef5f5;
         }
         
+        .form-option label {
+            display: block;
+            cursor: pointer;
+            margin: 0;
+        }
+        
         .form-option input[type="radio"] {
             margin-right: 10px;
         }
         
-        .form-option label {
-            display: block;
-            cursor: pointer;
-            font-weight: 500;
+        .form-option strong {
             color: #333;
         }
         
@@ -144,7 +531,6 @@
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 20px;
             transition: background-color 0.3s;
         }
         
@@ -157,7 +543,7 @@
             cursor: not-allowed;
         }
         
-        /* Form display container */
+        /* Form container */
         .form-container {
             display: none;
             margin-top: 30px;
@@ -179,11 +565,6 @@
         .form-notice h3 {
             margin-top: 0;
             color: #155724;
-        }
-        
-        .form-notice p {
-            color: #155724;
-            margin: 10px 0;
         }
         
         .open-form-btn {
@@ -211,27 +592,12 @@
             margin-top: 20px;
         }
         
-        .form-links h4 {
-            margin-top: 0;
-            color: #333;
-        }
-        
         .link-option {
             margin: 10px 0;
             padding: 10px;
             background: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        
-        .link-option a {
-            color: #C8102E;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .link-option a:hover {
-            text-decoration: underline;
         }
         
         .back-btn {
@@ -243,7 +609,6 @@
             border-radius: 4px;
             cursor: pointer;
             margin-top: 20px;
-            transition: background-color 0.3s;
         }
         
         .back-btn:hover {
@@ -272,261 +637,388 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Sidebar styles */
-        .content-wrapper {
-            display: flex;
-            gap: 30px;
+        /* Mobile navigation */
+        .navbar-toggler {
+            background: none;
+            border: none;
+            padding: 4px 12px;
+            cursor: pointer;
         }
         
-        .sidebar {
-            width: 300px;
-            flex-shrink: 0;
+        .icon-bar {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: white;
+            margin: 6px 0;
+            transition: 0.3s;
         }
         
-        .sidebar-section {
-            background: #f9f9f9;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+        #nav-mobile {
+            display: none;
+            background-color: #C8102E;
         }
         
-        .sidebar-section h3 {
-            color: #C8102E;
-            margin-bottom: 15px;
-            font-size: 16px;
-            text-transform: uppercase;
-        }
-        
-        .sidebar-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .sidebar-links li {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar-links a {
-            color: #C8102E;
-            text-decoration: none;
-        }
-        
-        .sidebar-links a:hover {
-            text-decoration: underline;
-        }
-        
-        .main-content {
-            flex: 1;
-        }
-        
-        /* Responsive design */
+        /* Responsive */
         @media (max-width: 768px) {
+            .nav-main.d-none.d-sm-block {
+                display: none !important;
+            }
+            
+            #nav-mobile {
+                display: block;
+            }
+            
             .form-options {
                 grid-template-columns: 1fr;
             }
             
-            .content-wrapper {
+            .footer-links-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-required {
                 flex-direction: column;
             }
-            
-            .sidebar {
-                width: 100%;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .nav-links {
-                margin-top: 15px;
-            }
-        }
-        
-        /* Hidden iframe for testing */
-        .hidden-test-iframe {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            left: -1000px;
-            top: -1000px;
         }
     </style>
+    
+    <meta property="og:image" content="/images/interlocking-uh.png">
+    <meta property="og:image:alt" content="Interlocking UH logo">
+    <meta property="og:title" content="Request Allocation">
+    <meta property="og:url" content="/research/rcdc/getting-started/request-allocation.php">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="/research/rcdc/getting-started/request-allocation.php">
+    <meta name="twitter:title" content="Request Allocation">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:site" content="University of Houston">
 </head>
 <body>
-    <!-- Header -->
-    <header class="uh-header">
-        <div class="header-content">
-            <a href="https://www.uh.edu" class="uh-logo">
-                <span style="font-size: 24px; font-weight: bold;">UNIVERSITY OF HOUSTON</span>
-            </a>
-            <nav class="nav-links">
-                <a href="#">Visit</a>
-                <a href="#">Apply</a>
-                <a href="#">Give</a>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-M76VPMR" style="display:none;visibility:hidden" width="0"></iframe>
+    </noscript>
+    
+    <header>
+        <div class="site-navigation">
+            <a class="skipToContent" href="#main-content" tabindex="1">Skip to main content</a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="nav-main d-none d-sm-block">
+                <div class="container">
+                    <a href="https://www.uh.edu/">
+                        <img alt="Logo" class="main-logo" src="https://www.uh.edu/images/uh-secondary.svg">
+                    </a>
+                    <ul class="nav-main-list-items">
+                        <li class="search-bar">
+                            <form action="https://www.uh.edu/search" class="global-search" id="globalSearch" method="get" role="search">
+                                <div class="container-search-bar">
+                                    <label class="sr-only" for="globalSearchField">Search Field</label>
+                                    <input class="search-field" id="globalSearchField" name="q" placeholder="" type="text">
+                                    <img alt="Magnifying-glass icon" class="magnifying-glass" src="https://www.uh.edu/images/magnifying-glass-solid.svg">
+                                    <button class="search-submit" type="submit" aria-label="Submit"></button>
+                                </div>
+                            </form>
+                        </li>
+                        <li class="nav-main-item nav-item"><a class="nav-link ga-mm" href="https://uh.edu/undergraduate-admissions/visit/">Visit</a></li>
+                        <li class="nav-main-item nav-item"><a class="nav-link ga-mm" href="https://uh.edu/undergraduate-admissions/apply/index">Apply</a></li>
+                        <li class="nav-main-item nav-item"><a class="nav-link ga-mm" href="https://giving.uh.edu/gift">Give</a></li>
+                    </ul>
+                </div>
             </nav>
+            
+            <!-- Mobile Navigation -->
+            <nav class="navbar navbar-default" id="nav-mobile">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="https://www.uh.edu/">
+                            <img alt="logo" src="https://www.uh.edu/images/uh-secondary.svg">
+                        </a>
+                        <button class="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <!-- Mobile menu content -->
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="uh-header uh-header-secondary">
+                <div class="site-name" style="margin: 0;">
+                    <div class="container">
+                        <h1><a href="/research/rcdc/">Research Computing Data Core</a></h1>
+                    </div>
+                </div>
+                <nav class="site-nav navbar-collapse collapse">
+                    <div class="container">
+                        <ul class="nav-primary">
+                            <li><a href="https://hpedsi.uh.edu/">HPE DSI</a></li>
+                            <li>
+                                <a href="/research/rcdc/getting-started/">Getting Started<span class="caret"><svg viewBox="0 0 24 24">
+                                    <path d="M16.23,8.65L12,12.88L7.77,8.65c-0.39-0.39-1.02-0.39-1.41,0L5.65,9.35c-0.39,0.39-0.39,1.02,0,1.41l5.65,5.65 c0.39,0.39,1.02,0.39,1.41,0l5.65-5.65c0.39-0.39,0.39-1.02,0-1.41l-0.71-0.71C17.26,8.26,16.62,8.26,16.23,8.65z"/>
+                                </svg></span></a>
+                                <ul class="children">
+                                    <li><a href="/research/rcdc/getting-started/request-account.php">Request Account</a></li>
+                                    <li><a href="/research/rcdc/getting-started/request-allocation.php">Request Allocation</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/research/rcdc/resources/">Resources<span class="caret"><svg viewBox="0 0 24 24">
+                                    <path d="M16.23,8.65L12,12.88L7.77,8.65c-0.39-0.39-1.02-0.39-1.41,0L5.65,9.35c-0.39,0.39-0.39,1.02,0,1.41l5.65,5.65 c0.39,0.39,1.02,0.39,1.41,0l5.65-5.65c0.39-0.39,0.39-1.02,0-1.41l-0.71-0.71C17.26,8.26,16.62,8.26,16.23,8.65z"/>
+                                </svg></span></a>
+                                <ul class="children">
+                                    <li><a href="/research/rcdc/resources/hpc/">High Performance Computing</a></li>
+                                    <li><a href="/research/rcdc/resources/software.php">Software</a></li>
+                                    <li><a href="/research/rcdc/resources/rcdc-visualization-theater.php">RCDC Visualization Theater</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/research/rcdc/support-and-services/">Support & Services<span class="caret"><svg viewBox="0 0 24 24">
+                                    <path d="M16.23,8.65L12,12.88L7.77,8.65c-0.39-0.39-1.02-0.39-1.41,0L5.65,9.35c-0.39,0.39-0.39,1.02,0,1.41l5.65,5.65 c0.39,0.39,1.02,0.39,1.41,0l5.65-5.65c0.39-0.39,0.39-1.02,0-1.41l-0.71-0.71C17.26,8.26,16.62,8.26,16.23,8.65z"/>
+                                </svg></span></a>
+                                <ul class="children">
+                                    <li><a href="/research/rcdc/support-and-services/support.php">Consulting & Technical Support</a></li>
+                                    <li><a href="/research/rcdc/support-and-services/user-guide/">RCDC User Guide</a></li>
+                                    <li><a href="https://hpedsi.uh.edu/education/training/">Tutorials & Courses</a></li>
+                                    <li><a href="/research/rcdc/support-and-services/condo.php">Cluster Partnership Program</a></li>
+                                    <li><a href="/research/rcdc/support-and-services/faq.php">Frequently Asked Questions</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/research/rcdc/acknowledgement.php">Acknowledgement</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
         </div>
     </header>
     
-    <!-- RCDC Header -->
-    <div style="background-color: #8B1538; color: white; padding: 40px 0;">
-        <div class="header-content">
-            <h1 style="margin: 0; font-size: 48px; font-weight: 300;">Research Computing Data Core</h1>
-        </div>
-    </div>
-    
-    <!-- Navigation Bar -->
-    <div style="background-color: #6d1229; color: white; padding: 15px 0;">
-        <div class="header-content">
-            <nav style="display: flex; gap: 30px;">
-                <a href="#" style="color: white; text-decoration: none;">HPE DSI</a>
-                <a href="#" style="color: white; text-decoration: none;">Getting Started ▼</a>
-                <a href="#" style="color: white; text-decoration: none;">Resources ▼</a>
-                <a href="#" style="color: white; text-decoration: none;">Support & Services ▼</a>
-                <a href="#" style="color: white; text-decoration: none;">Acknowledgement</a>
-            </nav>
-        </div>
-    </div>
-    
-    <!-- Main Content -->
-    <div class="main-container">
-        <div class="breadcrumb">
-            <a href="https://uh.edu">UH Home</a> > 
-            <a href="#">Division of Research</a> > 
-            <a href="#">Research Computing Data Core</a> > 
-            Request Allocation
-        </div>
+    <main class="container" id="wrap">
+        <ol class="breadcrumb">
+            <li><a href="https://www.uh.edu/">UH Home</a></li>
+            <li><a href="/research/">Division of Research</a></li>
+            <li><a href="/research/rcdc/">Research Computing Data Core</a></li>
+            <li class="active">Request Allocation</li>
+        </ol>
         
-        <div class="content-wrapper">
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="sidebar-section">
-                    <h3>Division of Research</h3>
-                    <ul class="sidebar-links">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Funding Opportunities</a></li>
-                        <li><a href="#">Sponsored Projects</a></li>
-                        <li><a href="#">Compliance</a></li>
-                        <li><a href="#">News and Events</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="sidebar-section">
-                    <h3>RCDC</h3>
-                    <ul class="sidebar-links">
-                        <li><a href="#">Getting Started</a></li>
-                        <li><a href="#">Request Account</a></li>
-                        <li style="background: #C8102E; margin: 0 -20px; padding: 10px 20px;">
-                            <a href="#" style="color: white;">Request Allocation</a>
+        <section class="row" id="page">
+            <div class="nav-secondary col col-sm-3">
+                <h2 class="site-title"><a href="/research/" title="Division of Research">Division of Research</a></h2>
+                <nav role="navigation">
+                    <ul>
+                        <li><a href="/research/about/">About</a></li>
+                        <li><a href="/research/funding-opportunities/">Funding Opportunities</a></li>
+                        <li><a href="/research/sponsored-projects/">Sponsored Projects</a></li>
+                        <li><a href="/research/compliance/">Compliance</a></li>
+                        <li><a href="/research/news-events/">News and Events</a></li>
+                        <li><a href="/research/contact/">Contact</a></li>
+                        <li class="opened">
+                            <a href="/research/rcdc/">RCDC</a>
+                            <ul>
+                                <li class="opened">
+                                    <a href="/research/rcdc/getting-started/">Getting Started</a>
+                                    <ul>
+                                        <li><a href="/research/rcdc/getting-started/request-account.php">Request Account</a></li>
+                                        <li class="selected"><a href="/research/rcdc/getting-started/request-allocation.php">Request Allocation</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/research/rcdc/resources/resources.php">Resources</a></li>
+                                <li><a href="/research/rcdc/support-and-services/">Support & Services</a></li>
+                                <li><a href="/research/rcdc/acknowledgement.php">Acknowledgement</a></li>
+                            </ul>
                         </li>
-                        <li><a href="#">Resources</a></li>
-                        <li><a href="#">Support & Services</a></li>
-                        <li><a href="#">Acknowledgement</a></li>
+                        <li><a href="/research/resources/">Resources</a></li>
+                        <li><a href="/research/research-security/">Research Security</a></li>
+                        <li><a href="/research/core-facilities/">Core Facilities</a></li>
                     </ul>
-                </div>
+                </nav>
                 
-                <div class="sidebar-section">
-                    <h3>ANY QUESTIONS?</h3>
-                    <p style="font-size: 14px; color: #666;">
-                        We will be happy to answer any questions you may have about the allocation process at 
-                        <a href="mailto:contact@hpedsi.uh.edu">contact@hpedsi.uh.edu</a>.
-                    </p>
-                </div>
-            </aside>
+                <h3>ANY QUESTIONS?</h3>
+                <p>We will be happy to answer any questions you may have about the allocation process at <a href="mailto:contact@hpedsi.uh.edu">contact@hpedsi.uh.edu</a>.</p>
+            </div>
             
-            <!-- Main Content Area -->
-            <div class="main-content">
-                <h1>Request Resources/Allocation on RCDC Clusters</h1>
+            <article id="main-content-span" class="col-12 col-md-9">
+                <header>
+                    <h1>Request Resources/Allocation on RCDC Clusters</h1>
+                </header>
                 
-                <p>An allocation is a quantity of computing time and storage resources that are granted to a principal investigator (PI). 
-                To apply for a PI account please refer to <a href="#" style="color: #C8102E;">Request Account</a>.</p>
-                
-                <p>The basic unit of computational resources is the service unit (SU), which represents the use of one core for one hour on the Sabine 
-                Cluster. Allocations are intended to support researchers furthering specific research and have a duration of 1 year. Dedicated 
-                resources acquired through the <a href="#" style="color: #C8102E;">Cluster Partnership Program</a> (Condo Model) are not governed by this allocation policy.</p>
-                
-                <p>It may take up to a week to process your request.</p>
-                
-                <div style="background: #f0f0f0; padding: 20px; border-radius: 4px; margin: 20px 0;">
-                    <em>Please allow extra time if your request is for more than 250,000 SUs, because such cases require approval from the Director of HPE DSI.</em>
+                <section id="content-well">
+                    <p>An allocation is a quantity of computing time and storage resources that are granted to a principal investigator (PI). To apply for a PI account please refer to <a href="/research/rcdc/getting-started/request-account.php">Request Account</a>.</p>
+                    
+                    <p>The basic unit of computational resources is the service unit (SU), which represents the use of one core for one hour on the Sabine Cluster. Allocations are intended to support researchers furthering specific research and have a duration of 1 year. Dedicated resources acquired through the <a href="/research/rcdc/support-and-services/condo.php">Cluster Partnership Program</a> (Condo Model) are not governed by this allocation policy.</p>
+                    
+                    <p>It may take up to a week to process your request.</p>
+                    
+                    <p class="alert alert-secondary"><em>Please allow extra time if your request is for more than 250,000 SUs, because such cases require approval from the Director of HPE DSI.</em></p>
+                    
+                    <!-- Form Selection -->
+                    <div class="form-selector" id="formSelector">
+                        <h2>Select the type of allocation request:</h2>
+                        <div class="form-options">
+                            <div class="form-option" onclick="selectOption(this)">
+                                <label>
+                                    <input type="radio" name="formType" value="storage">
+                                    <strong>Additional Storage Resources</strong>
+                                    <div class="form-description">Request additional storage for your existing project</div>
+                                </label>
+                            </div>
+                            <div class="form-option" onclick="selectOption(this)">
+                                <label>
+                                    <input type="radio" name="formType" value="renew">
+                                    <strong>Renew Existing Project</strong>
+                                    <div class="form-description">Annual renewal (by August 1st)</div>
+                                </label>
+                            </div>
+                            <div class="form-option" onclick="selectOption(this)">
+                                <label>
+                                    <input type="radio" name="formType" value="new">
+                                    <strong>New Project Allocation</strong>
+                                    <div class="form-description">Request resources for a new research project</div>
+                                </label>
+                            </div>
+                            <div class="form-option" onclick="selectOption(this)">
+                                <label>
+                                    <input type="radio" name="formType" value="compute">
+                                    <strong>Additional Compute Resources</strong>
+                                    <div class="form-description">Request additional compute resources for your project</div>
+                                </label>
+                            </div>
+                        </div>
+                        <button class="submit-btn" id="continueBtn" onclick="showSelectedForm()" disabled>Continue to Form</button>
+                    </div>
+                    
+                    <!-- Form Container -->
+                    <div class="form-container" id="formContainer">
+                        <div class="loading-indicator" id="loadingIndicator">
+                            <div class="spinner"></div>
+                            <p>Preparing your form...</p>
+                        </div>
+                        
+                        <div class="form-notice" id="formNotice" style="display: none;">
+                            <h3>Ready to Complete Your Request</h3>
+                            <p>Click the button below to open the allocation request form in a secure Microsoft Forms window.</p>
+                            <button class="open-form-btn" id="openFormBtn" onclick="openFormInNewWindow()">
+                                Open Request Form
+                            </button>
+                            <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                                The form will open in a new window. Please disable pop-up blockers if the form doesn't appear.
+                            </p>
+                        </div>
+                        
+                        <div class="form-links" id="alternativeLinks" style="display: none;">
+                            <h4>Alternative Access Options:</h4>
+                            <div class="link-option">
+                                <strong>Option 1:</strong> 
+                                <a href="#" id="directLink" target="_blank">Click here to open the form directly</a>
+                            </div>
+                            <div class="link-option">
+                                <strong>Option 2:</strong> Copy this link and paste it in a new browser tab:
+                                <div style="margin-top: 5px; padding: 10px; background: #f0f0f0; border-radius: 4px; word-break: break-all; font-family: monospace; font-size: 12px;" id="formUrlDisplay"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="back-btn" onclick="resetForm()">← Back to Form Selection</button>
+                    </div>
+                </section>
+            </article>
+            <footer></footer>
+        </section>
+    </main>
+    
+    <footer class="uh-footer uh-footer-main">
+        <nav aria-label="Site Footer" class="site-footer">
+            <div class="container">
+                <div class="contact-block">
+                    <div class="footer-logo">
+                        <a href="https://www.uh.edu/">
+                            <img alt="University of Houston" src="https://www.uh.edu/images/uh-primary.svg" style="height: 53px;">
+                        </a>
+                    </div>
+                    <div class="contact-info">
+                        <div class="contact-info">
+                            <a href="https://www.google.com/maps/place/University+of+Houston">University of Houston <br> Houston, Texas 77204 </a><br>
+                            <a href="tel:1-713-743-2255">(713) 743-2255</a>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Form Selection -->
-                <div class="form-selector" id="formSelector">
-                    <h2>Select the type of allocation request:</h2>
-                    <div class="form-options">
-                        <div class="form-option" onclick="selectOption(this)">
-                            <label>
-                                <input type="radio" name="formType" value="storage">
-                                <strong>Additional Storage Resources</strong>
-                                <div class="form-description">Request additional storage for your existing project</div>
-                            </label>
-                        </div>
-                        <div class="form-option" onclick="selectOption(this)">
-                            <label>
-                                <input type="radio" name="formType" value="renew">
-                                <strong>Renew Existing Project</strong>
-                                <div class="form-description">Annual renewal (by August 1st)</div>
-                            </label>
-                        </div>
-                        <div class="form-option" onclick="selectOption(this)">
-                            <label>
-                                <input type="radio" name="formType" value="new">
-                                <strong>New Project Allocation</strong>
-                                <div class="form-description">Request resources for a new research project</div>
-                            </label>
-                        </div>
-                        <div class="form-option" onclick="selectOption(this)">
-                            <label>
-                                <input type="radio" name="formType" value="compute">
-                                <strong>Additional Compute Resources</strong>
-                                <div class="form-description">Request additional compute resources for your project</div>
-                            </label>
-                        </div>
-                    </div>
-                    <button class="submit-btn" id="continueBtn" onclick="showSelectedForm()" disabled>Continue to Form</button>
-                </div>
-                
-                <!-- Form Container -->
-                <div class="form-container" id="formContainer">
-                    <div class="loading-indicator" id="loadingIndicator">
-                        <div class="spinner"></div>
-                        <p>Preparing your form...</p>
-                    </div>
-                    
-                    <div class="form-notice" id="formNotice" style="display: none;">
-                        <h3>Ready to Complete Your Request</h3>
-                        <p>Click the button below to open the allocation request form in a secure Microsoft Forms window.</p>
-                        <button class="open-form-btn" id="openFormBtn" onclick="openFormInNewWindow()">
-                            Open Request Form
-                        </button>
-                        <p style="font-size: 14px; color: #666; margin-top: 15px;">
-                            The form will open in a new window. Please disable pop-up blockers if the form doesn't appear.
-                        </p>
-                    </div>
-                    
-                    <div class="form-links" id="alternativeLinks" style="display: none;">
-                        <h4>Alternative Access Options:</h4>
-                        <div class="link-option">
-                            <strong>Option 1:</strong> 
-                            <a href="#" id="directLink" target="_blank">Click here to open the form directly</a>
-                        </div>
-                        <div class="link-option">
-                            <strong>Option 2:</strong> Copy this link and paste it in a new browser tab:
-                            <div style="margin-top: 5px; padding: 10px; background: #f0f0f0; border-radius: 4px; word-break: break-all; font-family: monospace; font-size: 12px;" id="formUrlDisplay"></div>
-                        </div>
-                    </div>
-                    
-                    <button class="back-btn" onclick="resetForm()">← Back to Form Selection</button>
+                <div class="footer-links">
+                    <ul class="footer-links-list">
+                        <li><a href="/academics/catalog/academic-calendar/">Academic Calendar</a></li>
+                        <li><a href="/police/policies-training/campus-carry/">Campus Carry Policy</a></li>
+                        <li><a href="/maps/">Campus Map</a></li>
+                        <li><a href="/career-opportunities/">Career Opportunities</a></li>
+                        <li><a href="/directory/">Directory</a></li>
+                        <li><a href="/emergency/">Emergency Information</a></li>
+                        <li><a href="https://gethelp.uh.edu/">Get Help</a></li>
+                        <li><a href="/human-resources/">Human Resources</a></li>
+                        <li><a href="https://libraries.uh.edu/">Library</a></li>
+                        <li><a href="/coogs-care/">Mental Health Resources</a></li>
+                        <li><a href="/president/">Office of the President</a></li>
+                        <li><a href="/parking/">Parking</a></li>
+                        <li><a href="https://www.uhsystem.edu/copyright/">Report Copyright Infringement</a></li>
+                        <li><a href="/sexual-misconduct-reporting-form/">Discrimination and Sexual Misconduct Reporting and Awareness</a></li>
+                        <li><a href="https://uhsystem.edu/offices/legal-affairs/general-counsel/public-information-act/">Open Records/Public Information Act</a></li>
+                        <li><a href="https://veterans.portal.texas.gov/">Texas Veterans Portal</a></li>
+                        <li><a href="/financial/">Tuition & Fees</a></li>
+                        <li><a href="https://www.uhsystem.edu/"><abbr title="University of Houston">UH</abbr> System </a></li>
+                        <li><a href="https://uh.edu/about/offices/">University Offices</a></li>
+                        <li><a href="/about/index.php#virtual-tour">Virtual Tour</a></li>
+                    </ul>
+                    <ul class="social-media-list">
+                        <li><a aria-label="Facebook" href="https://www.facebook.com/universityofhouston" rel="noopener" target="_blank" title="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/>
+                        </svg></a></li>
+                        <li><a aria-label="Instagram" href="https://instagram.com/universityofhouston" rel="noopener" target="_blank" title="Instagram"><svg viewBox="0 0 24 24">
+                            <path d="M12,5.8c-3.4,0-6.2,2.8-6.2,6.2s2.8,6.2,6.2,6.2s6.2-2.8,6.2-6.2S15.4,5.8,12,5.8z M12,15.9c-2.2,0-4-1.8-4-4s1.8-4,4-4 s4,1.8,4,4S14.2,15.9,12,15.9z M18.4,4.2c0.8,0,1.4,0.6,1.4,1.4S19.2,7,18.4,7S17,6.4,17,5.6S17.6,4.2,18.4,4.2z M22.1,2 c-1.3-1.3-3-2-5.1-2H7C2.8,0,0,2.8,0,7v9.9c0,2.1,0.7,3.9,2,5.2C3.3,23.3,5,24,7.1,24H17c2.1,0,3.8-0.7,5.1-1.9c1.3-1.3,2-3,2-5.1V7 C24,5,23.3,3.2,22.1,2z M21.8,17c0,1.5-0.5,2.7-1.3,3.5c-0.9,0.8-2.1,1.3-3.6,1.3H7.1c-1.4,0-2.7-0.4-3.5-1.3 c-0.9-0.9-1.3-2.1-1.3-3.6V7c0-1.5,0.4-2.7,1.3-3.5c0.7-0.8,2-1.3,3.4-1.3h10c1.4,0,2.7,0.5,3.5,1.3c0.8,0.9,1.3,2.1,1.3,3.5V17z"/>
+                        </svg></a></li>
+                        <li><a aria-label="LinkedIn" href="https://www.linkedin.com/company/university-of-houston" rel="noopener" target="_blank" title="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/>
+                        </svg></a></li>
+                        <li><a aria-label="Threads" href="https://www.threads.com/@universityofhouston" rel="noopener" target="_blank" title="Threads"><svg viewBox="0 0 24 24">
+                            <path d="M17.8,11.1C17.7,11,17.6,11,17.5,11c-0.1-3.5-2-5.4-5.2-5.4c-1.9,0-3.4,0.8-4.4,2.2L9.5,9c0.8-1.1,1.9-1.4,2.7-1.4,1.1,0,1.8,0.3,2.3,0.9,0.4,0.5,0.6,1.1,0.8,1.7-0.9-0.1-1.9-0.2-2.9-0.1-3,0.1-4.9,1.9-4.8,4.3,0.1,1.2,0.7,2.2,1.7,3,0.9,0.6,2,0.9,3.2,0.8,1.6-0.1,2.8-0.7,3.6-1.8,0.7-0.8,1.1-1.9,1.2-3.2,0.8,0.4,1.3,1.1,1.6,1.7,0.5,1.2,0.5,3.2-1,4.8-1.4,1.4-3.1,2-5.7,2-2.9,0-5-0.9-6.4-2.7-1.4-1.7-2-4-2-7.2,0-3.1,0.7-5.5,2-7.2C7.2,2.9,9.3,2,12.2,2s5.1,1,6.5,2.7c1.3,1.4,1.9,2.5,2.1,3.8l2-0.5c-0.3-1.5-1-2.9-1.9-4C18.5,1.2,15.8,0,12.2,0,8.7,0,6,1.2,4.2,3.5c-1.7,2-2.5,4.9-2.5,8.5,0,3.6,0.8,6.5,2.5,8.5,1.8,2.3,4.5,3.5,8,3.5,3.2,0,5.3-0.8,7.1-2.6,2.4-2.4,2.3-5.3,1.5-7.1C20.3,12.9,19.3,11.9,17.8,11.1z M12.4,16.2c-1.3,0.1-2.6-0.5-2.7-1.8-0.1-0.9,0.7-1.9,2.8-2.1,0.2,0,0.5,0,0.8,0,0.8,0,1.5,0.1,2.2,0.2C15.2,15.6,13.7,16.1,12.4,16.2z"/>
+                        </svg></a></li>
+                        <li><a aria-label="Bluesky" href="https://bsky.app/profile/uh.edu" rel="noopener" target="_blank" title="Bluesky"><svg xmlns="http://www.w3.org/2000/svg" class="bi bi-bluesky" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M3.5,1.9c1.8,1.4,3.8,4.2,4.5,5.7.7-1.5,2.7-4.3,4.5-5.7,1.3-1,3.5-1.8,3.5.7s-.3,4.1-.4,4.7c-.6,2-2.7,2.6-4.5,2.2,3.2.6,4.1,2.4,2.3,4.2-3.4,3.5-4.9-.9-5.2-2,0-.2-.1-.3-.1-.2,0,0,0,0-.1.2-.4,1.1-1.9,5.4-5.2,2-1.8-1.8-1-3.6,2.3-4.2-1.9.3-3.9-.2-4.5-2.2-.2-.6-.4-4.2-.4-4.7C0,.1,2.1.9,3.5,1.9h0Z"/>
+                        </svg></a></li>
+                        <li><a aria-label="X" href="https://x.com/UHouston" rel="noopener" target="_blank" title="X"><svg viewBox="0 0 24 24">
+                            <path d="M18.9,1.2h3.7l-8,9.2L24,22.8h-7.4l-5.8-7.6l-6.6,7.6H0.5L9.1,13L0,1.2h7.6l5.2,6.9L18.9,1.2z M17.6,20.6h2L6.5,3.2H4.3 L17.6,20.6z"/>
+                        </svg></a></li>
+                        <li><a aria-label="YouTube" href="https://www.youtube.com/@UniversityOfHouston" rel="noopener" target="_blank" title="YouTube"><svg viewBox="0 0 24 24">
+                            <path d="M24,12.9c0,1.9-0.2,3.9-0.2,3.9s-0.2,1.7-1,2.4c-0.9,1-1.9,1-2.4,1C17,20.4,12,20.4,12,20.4s-6.2-0.1-8.2-0.2 c-0.5-0.1-1.7-0.1-2.6-1c-0.7-0.7-1-2.4-1-2.4S0,14.8,0,12.9v-1.8c0-1.9,0.2-3.9,0.2-3.9s0.2-1.7,1-2.4c0.9-1,1.9-1,2.4-1 C7,3.6,12,3.6,12,3.6h0c0,0,5,0,8.4,0.2c0.5,0.1,1.5,0.1,2.4,1c0.7,0.7,1,2.4,1,2.4S24,9.1,24,11.1V12.9z M9.5,15.1l6.5-3.4L9.5,8.4 L9.5,15.1z"/>
+                        </svg></a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Hidden test iframe -->
-    <iframe id="testFrame" class="hidden-test-iframe"></iframe>
+        </nav>
+        <nav aria-label="Global Footer" class="global-footer">
+            <div class="container">
+                <p class="copyright">
+                    <span aria-hidden="true" id="directedit">©</span>2025 University of Houston. All rights reserved.
+                </p>
+                <ul class="nav-required">
+                    <li class="nav-item-highlighted"><a href="/web-update/report-a-problem/">Report a problem with this page</a></li>
+                    <li><a href="https://www.texas.gov/" target="_blank" rel="noopener">Texas.gov</a></li>
+                    <li><a href="https://gov.texas.gov/organization/hsgd" target="_blank" rel="noopener">Texas Homeland Security</a></li>
+                    <li><a href="https://www.tsl.texas.gov/trail/index.html" target="_blank" rel="noopener">TRAIL</a></li>
+                    <li><a href="https://sao.fraud.texas.gov/ReportFraud/" target="_blank" rel="noopener">Fraud Reporting</a></li>
+                    <li><a href="https://www.uhsystem.edu/fraud-non-compliance/" target="_blank" rel="noopener">Fraud & Non-Compliance Hotline</a></li>
+                    <li><a href="https://www.sos.state.tx.us/linkpolicy.shtml" target="_blank" rel="noopener">Linking Notice</a></li>
+                    <li><a href="https://uhsystem.edu/privacy-notice/" target="_blank" rel="noopener">Privacy Notice</a></li>
+                    <li><a href="https://uhsystem.edu/offices/legal-affairs/general-counsel/public-information-act/" target="_blank" rel="noopener">Open Records/Public Information Act</a></li>
+                    <li><a href="https://apps.highered.texas.gov/resumes/">Institutional Résumé</a></li>
+                    <li><a href="/office-of-finance/required-reports/">Required Reports</a></li>
+                    <li><a href="/equal-opportunity/eir-accessibility/">Electronic & Information Resources Accessibility</a></li>
+                    <li><a href="/sexual-misconduct-reporting-form/">Discrimination and Sexual Misconduct Reporting and Awareness</a></li>
+                    <li><a href="/policies/">University Policies</a></li>
+                </ul>
+            </div>
+        </nav>
+    </footer>
     
     <script>
         // Form URLs - using the regular URLs without embed parameter
@@ -699,6 +1191,19 @@
         window.addEventListener('beforeunload', function(e) {
             if (formWindow && !formWindow.closed) {
                 return 'You have a form open in another window. Are you sure you want to leave?';
+            }
+        });
+        
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggler = document.querySelector('.navbar-toggler');
+            const collapse = document.querySelector('.navbar-collapse');
+            
+            if (toggler) {
+                toggler.addEventListener('click', function() {
+                    collapse.classList.toggle('show');
+                    toggler.setAttribute('aria-expanded', collapse.classList.contains('show'));
+                });
             }
         });
     </script>
