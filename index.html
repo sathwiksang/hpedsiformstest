@@ -106,11 +106,17 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
         }
         
         .form-option:hover {
             border-color: #C8102E;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .form-option.selected {
+            border-color: #C8102E;
+            background-color: #fef5f5;
         }
         
         .form-option input[type="radio"] {
@@ -139,13 +145,19 @@
             border-radius: 4px;
             cursor: pointer;
             margin-top: 20px;
+            transition: background-color 0.3s;
         }
         
         .submit-btn:hover {
             background-color: #a00825;
         }
         
-        /* Embedded form container */
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* Form display container */
         .form-container {
             display: none;
             margin-top: 30px;
@@ -156,25 +168,108 @@
         }
         
         .form-notice {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 15px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 20px;
             border-radius: 4px;
             margin-bottom: 20px;
+            text-align: center;
         }
         
-        .form-notice a {
+        .form-notice h3 {
+            margin-top: 0;
+            color: #155724;
+        }
+        
+        .form-notice p {
+            color: #155724;
+            margin: 10px 0;
+        }
+        
+        .open-form-btn {
+            background-color: #C8102E;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        
+        .open-form-btn:hover {
+            background-color: #a00825;
+        }
+        
+        .form-links {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .form-links h4 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .link-option {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .link-option a {
             color: #C8102E;
+            text-decoration: none;
             font-weight: 500;
         }
         
-        .embedded-form {
-            width: 100%;
-            height: 480px;
+        .link-option a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
             border: none;
+            padding: 10px 20px;
+            font-size: 14px;
             border-radius: 4px;
-            max-width: 100%;
-            max-height: 100vh;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        /* Loading indicator */
+        .loading-indicator {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #C8102E;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         /* Sidebar styles */
@@ -238,6 +333,24 @@
             .sidebar {
                 width: 100%;
             }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+        }
+        
+        /* Hidden iframe for testing */
+        .hidden-test-iframe {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            left: -1000px;
+            top: -1000px;
         }
     </style>
 </head>
@@ -344,28 +457,28 @@
                 <div class="form-selector" id="formSelector">
                     <h2>Select the type of allocation request:</h2>
                     <div class="form-options">
-                        <div class="form-option">
+                        <div class="form-option" onclick="selectOption(this)">
                             <label>
                                 <input type="radio" name="formType" value="storage">
                                 <strong>Additional Storage Resources</strong>
                                 <div class="form-description">Request additional storage for your existing project</div>
                             </label>
                         </div>
-                        <div class="form-option">
+                        <div class="form-option" onclick="selectOption(this)">
                             <label>
                                 <input type="radio" name="formType" value="renew">
                                 <strong>Renew Existing Project</strong>
                                 <div class="form-description">Annual renewal (by August 1st)</div>
                             </label>
                         </div>
-                        <div class="form-option">
+                        <div class="form-option" onclick="selectOption(this)">
                             <label>
                                 <input type="radio" name="formType" value="new">
                                 <strong>New Project Allocation</strong>
                                 <div class="form-description">Request resources for a new research project</div>
                             </label>
                         </div>
-                        <div class="form-option">
+                        <div class="form-option" onclick="selectOption(this)">
                             <label>
                                 <input type="radio" name="formType" value="compute">
                                 <strong>Additional Compute Resources</strong>
@@ -373,30 +486,88 @@
                             </label>
                         </div>
                     </div>
-                    <button class="submit-btn" onclick="showSelectedForm()">Continue to Form</button>
+                    <button class="submit-btn" id="continueBtn" onclick="showSelectedForm()" disabled>Continue to Form</button>
                 </div>
                 
                 <!-- Form Container -->
                 <div class="form-container" id="formContainer">
-                    <div class="form-notice">
-                        <strong>Note:</strong> If the form below does not load properly, 
-                        <a href="#" id="directLink" target="_blank">please click here to open it in a new window</a>.
+                    <div class="loading-indicator" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>Preparing your form...</p>
                     </div>
-                    <iframe id="msForm" class="embedded-form" src=""></iframe>
+                    
+                    <div class="form-notice" id="formNotice" style="display: none;">
+                        <h3>Ready to Complete Your Request</h3>
+                        <p>Click the button below to open the allocation request form in a secure Microsoft Forms window.</p>
+                        <button class="open-form-btn" id="openFormBtn" onclick="openFormInNewWindow()">
+                            Open Request Form
+                        </button>
+                        <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                            The form will open in a new window. Please disable pop-up blockers if the form doesn't appear.
+                        </p>
+                    </div>
+                    
+                    <div class="form-links" id="alternativeLinks" style="display: none;">
+                        <h4>Alternative Access Options:</h4>
+                        <div class="link-option">
+                            <strong>Option 1:</strong> 
+                            <a href="#" id="directLink" target="_blank">Click here to open the form directly</a>
+                        </div>
+                        <div class="link-option">
+                            <strong>Option 2:</strong> Copy this link and paste it in a new browser tab:
+                            <div style="margin-top: 5px; padding: 10px; background: #f0f0f0; border-radius: 4px; word-break: break-all; font-family: monospace; font-size: 12px;" id="formUrlDisplay"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="back-btn" onclick="resetForm()">← Back to Form Selection</button>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Hidden test iframe -->
+    <iframe id="testFrame" class="hidden-test-iframe"></iframe>
+    
     <script>
-        // Form URLs with embed=true parameter for better compatibility
+        // Form URLs - using the regular URLs without embed parameter
         const formUrls = {
-            storage: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNlFRR1hGNFMwOUJEUDBXSDBSRDYyOTdJVy4u&embed=true',
-            renew: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNUNFVDdRRDNZRUpaME80RkVVV0IySURNVy4u&embed=true',
-            new: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNjhOTjY0UDQ3NllLVkhWS09UR1YxWE82Uy4u&embed=true',
-            compute: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UQVBIS0hVRkI1UDBTV0JSOElLVkg1RTVRNy4u&embed=true'
+            storage: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNlFRR1hGNFMwOUJEUDBXSDBSRDYyOTdJVy4u',
+            renew: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNUNFVDdRRDNZRUpaME80RkVVV0IySURNVy4u',
+            new: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UNjhOTjY0UDQ3NllLVkhWS09UR1YxWE82Uy4u',
+            compute: 'https://forms.office.com/Pages/ResponsePage.aspx?id=vboLF_CikEytSw6PDwxCWUNNjUjgu1tNsgpg0NtTVe9UQVBIS0hVRkI1UDBTV0JSOElLVkg1RTVRNy4u'
         };
         
+        // Form titles for better UX
+        const formTitles = {
+            storage: 'Additional Storage Resources Request',
+            renew: 'Project Renewal Request',
+            new: 'New Project Allocation Request',
+            compute: 'Additional Compute Resources Request'
+        };
+        
+        let selectedFormType = null;
+        let formWindow = null;
+        
+        // Handle option selection
+        function selectOption(element) {
+            // Remove selected class from all options
+            document.querySelectorAll('.form-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            const radio = element.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Enable continue button
+            document.getElementById('continueBtn').disabled = false;
+            selectedFormType = radio.value;
+        }
+        
+        // Show selected form
         function showSelectedForm() {
             const selectedOption = document.querySelector('input[name="formType"]:checked');
             
@@ -405,8 +576,8 @@
                 return;
             }
             
-            const formType = selectedOption.value;
-            const formUrl = formUrls[formType];
+            selectedFormType = selectedOption.value;
+            const formUrl = formUrls[selectedFormType];
             
             // Hide form selector
             document.getElementById('formSelector').style.display = 'none';
@@ -415,23 +586,121 @@
             const formContainer = document.getElementById('formContainer');
             formContainer.classList.add('active');
             
-            // Set iframe source
-            document.getElementById('msForm').src = formUrl;
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('formNotice').style.display = 'none';
+            document.getElementById('alternativeLinks').style.display = 'none';
             
-            // Set direct link
-            document.getElementById('directLink').href = formUrl;
+            // Set up the form access
+            setTimeout(() => {
+                setupFormAccess(formUrl);
+            }, 1000);
             
             // Scroll to form
             formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        // Add reset button functionality (optional)
-        function resetForm() {
-            document.getElementById('formSelector').style.display = 'block';
-            document.getElementById('formContainer').classList.remove('active');
-            document.getElementById('msForm').src = '';
-            document.querySelector('input[name="formType"]:checked').checked = false;
+        // Setup form access
+        function setupFormAccess(formUrl) {
+            // Hide loading
+            document.getElementById('loadingIndicator').style.display = 'none';
+            
+            // Show form notice
+            document.getElementById('formNotice').style.display = 'block';
+            
+            // Set direct link
+            document.getElementById('directLink').href = formUrl;
+            
+            // Set form URL display
+            document.getElementById('formUrlDisplay').textContent = formUrl;
+            
+            // Show alternative links
+            document.getElementById('alternativeLinks').style.display = 'block';
+            
+            // Update button text with form type
+            const btnText = `Open ${formTitles[selectedFormType]}`;
+            document.getElementById('openFormBtn').textContent = btnText;
         }
+        
+        // Open form in new window
+        function openFormInNewWindow() {
+            const formUrl = formUrls[selectedFormType];
+            const windowName = 'MSFormsWindow';
+            const windowFeatures = 'width=800,height=600,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes';
+            
+            // Close previous window if it exists
+            if (formWindow && !formWindow.closed) {
+                formWindow.close();
+            }
+            
+            // Open new window
+            formWindow = window.open(formUrl, windowName, windowFeatures);
+            
+            // Check if window was blocked
+            if (!formWindow || formWindow.closed || typeof formWindow.closed == 'undefined') {
+                alert('The form window was blocked by your browser.\n\nPlease disable pop-up blockers for this site or use one of the alternative access options below.');
+            } else {
+                // Focus the new window
+                formWindow.focus();
+                
+                // Optional: Check if window is still open after a delay
+                setTimeout(() => {
+                    if (formWindow.closed) {
+                        console.log('Form window was closed');
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Reset form
+        function resetForm() {
+            // Show form selector
+            document.getElementById('formSelector').style.display = 'block';
+            
+            // Hide form container
+            document.getElementById('formContainer').classList.remove('active');
+            
+            // Reset selections
+            const checkedRadio = document.querySelector('input[name="formType"]:checked');
+            if (checkedRadio) {
+                checkedRadio.checked = false;
+            }
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.form-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Disable continue button
+            document.getElementById('continueBtn').disabled = true;
+            
+            // Reset selected form type
+            selectedFormType = null;
+            
+            // Close form window if open
+            if (formWindow && !formWindow.closed) {
+                formWindow.close();
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('formContainer').classList.contains('active')) {
+                    resetForm();
+                }
+            }
+        });
+        
+        // Warn user about leaving with form open
+        window.addEventListener('beforeunload', function(e) {
+            if (formWindow && !formWindow.closed) {
+                return 'You have a form open in another window. Are you sure you want to leave?';
+            }
+        });
     </script>
 </body>
 </html>
